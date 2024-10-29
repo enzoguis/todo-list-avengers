@@ -5,6 +5,7 @@ import {
   doc,
   updateDoc,
   onSnapshot,
+  deleteDoc,
 } from 'firebase/firestore'
 import { db } from './firebase'
 import { Todos } from './models/todosSchema'
@@ -43,6 +44,11 @@ function TodoList() {
     await updateDoc(todoRef, { completed: !completed })
   }
 
+  const deleteTodo = async (id: string) => {
+    const todoRef = doc(db, 'todos', id)
+    await deleteDoc(todoRef)
+  }
+
   return (
     <div className="bg-slate-200 w-screen h-screen flex justify-center items-center">
       <div className="flex flex-col bg-white p-10 rounded-lg gap-y-4">
@@ -66,17 +72,28 @@ function TodoList() {
               key={item.id}
               className="flex gap-x-5 justify-start items-center"
             >
-              <input
-                type="checkbox"
-                checked={item.completed}
-                onChange={() => onChangeCheckBox(item.id, item.completed)}
-              />
-              <div className="flex items-center">
-                <h2
-                  className={item.completed ? 'line-through text-gray-700' : ''}
+              <div className="flex justify-between w-full">
+                <div className="flex items-center gap-x-3">
+                  <input
+                    type="checkbox"
+                    checked={item.completed}
+                    onChange={() => onChangeCheckBox(item.id, item.completed)}
+                  />
+
+                  <h2
+                    className={
+                      item.completed ? 'line-through text-gray-700' : ''
+                    }
+                  >
+                    {item.text}
+                  </h2>
+                </div>
+                <button
+                  onClick={() => deleteTodo(item.id)}
+                  className="bg-red-500 rounded-md p-1 text-white"
                 >
-                  {item.text}
-                </h2>
+                  Delete
+                </button>
               </div>
             </div>
           ))}
