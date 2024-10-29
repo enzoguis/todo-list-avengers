@@ -1,0 +1,1 @@
+{"root":["./src/firebase.ts","./src/main.tsx","./src/todoList.tsx","./src/vite-env.d.ts","./src/models/todosSchema.ts","./src/queries/useTodoQuery.ts"],"version":"5.6.3"}

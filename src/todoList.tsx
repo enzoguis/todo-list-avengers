@@ -86,13 +86,13 @@ function TodoList() {
             onClick={() => setFilter('completed')}
             className="p-2 bg-blue-500 text-white rounded-md"
           >
-            Feitas
+            Completas
           </button>
           <button
             onClick={() => setFilter('incomplete')}
             className="p-2 bg-blue-500 text-white rounded-md"
           >
-            Nao Feitas
+            Pendentes
           </button>
         </div>
         <div>
