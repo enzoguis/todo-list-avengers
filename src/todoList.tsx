@@ -13,6 +13,9 @@ import { Todos } from './models/todosSchema'
 function TodoList() {
   const [todo, setTodo] = useState<Todos[]>([])
   const [input, setInput] = useState('')
+  const [filter, setFilter] = useState<'all' | 'completed' | 'incomplete'>(
+    'all'
+  )
 
   useEffect(() => {
     const todoRef = collection(db, 'todos')
@@ -49,6 +52,12 @@ function TodoList() {
     await deleteDoc(todoRef)
   }
 
+  const filteredTodos = todo.filter((item) => {
+    if (filter === 'completed') return item.completed
+    if (filter === 'incomplete') return !item.completed
+    return true // 'all'
+  })
+
   return (
     <div className="bg-slate-200 w-screen h-screen flex justify-center items-center">
       <div className="flex flex-col bg-white p-10 rounded-lg gap-y-4">
@@ -66,8 +75,28 @@ function TodoList() {
             Add Todo
           </button>
         </div>
+        <div className="flex gap-x-2">
+          <button
+            onClick={() => setFilter('all')}
+            className="p-2 bg-blue-500 text-white rounded-md"
+          >
+            Todos
+          </button>
+          <button
+            onClick={() => setFilter('completed')}
+            className="p-2 bg-blue-500 text-white rounded-md"
+          >
+            Feitas
+          </button>
+          <button
+            onClick={() => setFilter('incomplete')}
+            className="p-2 bg-blue-500 text-white rounded-md"
+          >
+            Nao Feitas
+          </button>
+        </div>
         <div>
-          {todo.map((item) => (
+          {filteredTodos.map((item) => (
             <div
               key={item.id}
               className="flex gap-x-5 justify-start items-center"
@@ -79,7 +108,6 @@ function TodoList() {
                     checked={item.completed}
                     onChange={() => onChangeCheckBox(item.id, item.completed)}
                   />
-
                   <h2
                     className={
                       item.completed ? 'line-through text-gray-700' : ''
